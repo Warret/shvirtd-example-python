@@ -5,7 +5,6 @@ include:
 
 services:
   web:
-    # Собираем образ из нашего Dockerfile.python
     build:
       context: .
       dockerfile: Dockerfile.python
@@ -14,12 +13,10 @@ services:
       backend:
         ipv4_address: 172.20.0.5
     environment:
-      # ВНИМАНИЕ: Здесь нужно передать переменные для Python-приложения.
-      # Обрати внимание: хостом теперь является ИМЯ сервиса БД в docker compose, а не 127.0.0.1!
       - DB_HOST=db
-      - DB_USER=${MYSQL_USER}        # Подставь правильную переменную из .env
-      - DB_PASSWORD=${MYSQL_PASSWORD}    # Подставь правильную переменную из .env
-      - DB_NAME=${MYSQL_DATABASE}        # Подставь правильную переменную из .env
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_DATABASE}
 
   db:
     image: mysql:8
@@ -28,15 +25,11 @@ services:
       backend:
         ipv4_address: 172.20.0.10
     environment:
-      # Здесь переменные для САМОГО MySQL при его инициализации.
-      # Они должны совпадать с теми, что мы прописали в .env
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
-# Описание сети (она уже есть в proxy.yaml, но хорошая практика описать её и здесь, 
-# или убедиться, что в proxy.yaml она настроена с нужной подсетью 172.20.0.0/24)
 networks:
   backend:
     driver: bridge
