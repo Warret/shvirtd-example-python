@@ -1,6 +1,5 @@
 version: '3.8'
 
-# Подключаем внешний файл с прокси
 include:
   - proxy.yaml
 
